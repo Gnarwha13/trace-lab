@@ -1,0 +1,9 @@
+[submodule "themes/blox-bootstrap-starter"]
+	path = themes/blox-bootstrap-starter
+	url = https://github.com/HugoBlox/hugo-blox-builder
+[submodule "themes/research-group"]
+	path = themes/research-group
+	url = https://github.com/wowchemy/starter-hugo-research-group
+[submodule "themes/PaperMod"]
+	path = themes/PaperMod
+	url = https://github.com/adityatelange/hugo-PaperMod

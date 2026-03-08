@@ -1,0 +1,30 @@
+baseURL = 'https://trace-lab.net'
+languageCode = 'en-us'
+title = 'Trace Lab'
+theme = 'PaperMod'
+
+[params]
+  homeInfoParams = {Title = "Trace Lab", Content = "We are a research group focused on [your area]. Our work explores [topics] with the goal of [mission]."}
+  description = "Trace Lab research group"
+  author = "Trace Lab"
+  ShowReadingTime = false
+  ShowShareButtons = false
+  ShowPostNavLinks = false
+
+[menu]
+  [[menu.main]]
+    name = "Research"
+    url = "/research/"
+    weight = 1
+  [[menu.main]]
+    name = "People"
+    url = "/people/"
+    weight = 2
+  [[menu.main]]
+    name = "Publications"
+    url = "/publications/"
+    weight = 3
+  [[menu.main]]
+    name = "Experiments"
+    url = "/experiments/"
+    weight = 4
