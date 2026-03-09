@@ -145,6 +145,75 @@ The Streamlit experiments app lives on the server at `/var/www/experiments/app.p
 
 ---
 
+## Writing Shiny experiments (R)
+
+Shiny apps live in the `shiny-apps/` folder in this repo. Each subfolder is a separate app and maps directly to a URL:
+
+```
+shiny-apps/
+├── erp-viewer/
+│   └── app.R        →   r.trace-lab.net/erp-viewer/
+├── n400-demo/
+│   └── app.R        →   r.trace-lab.net/n400-demo/
+└── eeg-browser/
+    └── app.R        →   r.trace-lab.net/eeg-browser/
+```
+
+`r.trace-lab.net/` lists all available apps.
+
+### Adding a new Shiny app
+
+Create a new folder under `shiny-apps/` with an `app.R` file:
+
+```r
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("My Experiment"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("param", "Parameter", min = 0, max = 100, value = 50)
+    ),
+    mainPanel(
+      plotOutput("myPlot")
+    )
+  )
+)
+
+server <- function(input, output) {
+  output$myPlot <- renderPlot({
+    # your R code here
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+### Testing locally
+
+```r
+shiny::runApp("shiny-apps/my-experiment/")
+```
+
+### Deploying
+
+Push to `main` — the deploy script automatically syncs `shiny-apps/` to the server. Changes go live within 30 seconds.
+
+### Recommended R packages
+
+```r
+install.packages(c(
+  "shiny",
+  "ggplot2",
+  "dplyr",
+  "plotly",    # interactive plots
+  "eegUtils",  # EEG processing and visualization
+  "tidyr"
+))
+```
+
+---
+
 ## Writing Streamlit experiments
 
 Streamlit is a Python library that turns a plain Python script into an interactive web app — no HTML or JavaScript needed. The experiments app lives at [experiments.trace-lab.net](https://experiments.trace-lab.net) and is served from `/var/www/experiments/app.py` on the server.
@@ -245,7 +314,8 @@ sudo systemctl restart streamlit
 | Web server | Caddy |
 | DNS + CDN | Cloudflare (orange cloud) |
 | Static site | Hugo + PaperMod theme |
-| Experiments | Streamlit on port 8501 |
+| Experiments (Python) | Streamlit on port 8501 |
+| Experiments (R) | Shiny Server on port 3838 |
 | Deploy | GitHub Actions → SSH → `deploy-lab` |
 
 ---
