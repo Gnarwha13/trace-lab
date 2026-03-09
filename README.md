@@ -145,6 +145,98 @@ The Streamlit experiments app lives on the server at `/var/www/experiments/app.p
 
 ---
 
+## Writing Streamlit experiments
+
+Streamlit is a Python library that turns a plain Python script into an interactive web app — no HTML or JavaScript needed. The experiments app lives at [experiments.trace-lab.net](https://experiments.trace-lab.net) and is served from `/var/www/experiments/app.py` on the server.
+
+### How it works
+
+Streamlit runs your script top to bottom and renders each line as a UI element. When a user interacts with a widget (slider, button, dropdown), the script reruns automatically with the new values — no callbacks needed.
+
+```python
+import streamlit as st
+
+st.title("My Experiment")
+x = st.slider("Pick a number", 0, 100)
+st.write(f"You picked {x}")
+```
+
+That's a complete interactive app.
+
+### Common UI elements
+
+```python
+# Text
+st.title("Title")
+st.header("Header")
+st.write("Any text or variable")
+
+# Inputs
+x = st.slider("Label", min, max, default)
+option = st.selectbox("Label", ["A", "B", "C"])
+text = st.text_input("Label")
+clicked = st.button("Run")
+
+# Display
+st.pyplot(fig)        # matplotlib figure
+st.plotly_chart(fig)  # plotly figure
+st.dataframe(df)      # pandas dataframe
+st.image("path.png")  # image
+```
+
+### Adding a new experiment
+
+The simplest approach is a single app with sidebar navigation. Edit `/var/www/experiments/app.py` on the server:
+
+```python
+import streamlit as st
+
+page = st.sidebar.selectbox("Experiment", [
+    "Home",
+    "Experiment 1",
+    "Experiment 2",
+])
+
+if page == "Home":
+    st.title("Trace Lab Experiments")
+    st.write("Select an experiment from the sidebar.")
+
+elif page == "Experiment 1":
+    st.title("Experiment 1")
+    # your code here
+
+elif page == "Experiment 2":
+    st.title("Experiment 2")
+    # your code here
+```
+
+The app reloads automatically when you save the file — no restart needed.
+
+### Caching expensive computations
+
+If your experiment loads a model or processes a large dataset, cache it so it only runs once:
+
+```python
+@st.cache_data
+def load_data():
+    # runs once, result is cached
+    return pd.read_csv("data.csv")
+
+df = load_data()
+```
+
+### Installing new Python packages
+
+SSH into the Linode and install into the virtual environment:
+
+```bash
+source /var/www/experiments/venv/bin/activate
+pip install package-name
+sudo systemctl restart streamlit
+```
+
+---
+
 ## Infrastructure overview
 
 | Component | Details |
