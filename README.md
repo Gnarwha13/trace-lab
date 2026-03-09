@@ -9,7 +9,79 @@ Lab website for Trace Lab, running on Hugo (PaperMod theme) and hosted on Akamai
 - Content lives in the `content/` directory as Markdown files
 - Pushing to `main` automatically deploys the site via GitHub Actions
 - The live site is at [trace-lab.net](https://trace-lab.net)
-- Interactive experiments are at [experiments.trace-lab.net](https://experiments.trace-lab.net)
+- Python experiments are at [experiments.trace-lab.net](https://experiments.trace-lab.net)
+- R/Shiny experiments are at [r.trace-lab.net](https://r.trace-lab.net)
+
+### Repo structure
+
+```
+trace-lab/
+├── content/              # Hugo site content (Markdown)
+│   ├── _index.md         # Homepage
+│   ├── research/         # Research projects
+│   ├── people/           # Team profiles
+│   ├── publications/     # Papers and outputs
+│   └── experiments/      # Experiment index pages
+├── shiny-apps/           # R Shiny experiment apps
+│   ├── erp-viewer/
+│   │   └── app.R
+│   └── install-packages.R
+├── experiments/          # Python Streamlit experiment app
+│   ├── app.py
+│   └── requirements.txt
+├── static/               # Images, files, assets
+├── themes/               # Hugo theme (do not edit)
+├── hugo.toml             # Site configuration
+└── .github/workflows/    # Auto-deploy pipeline
+    └── deploy.yml
+```
+
+---
+
+## New collaborator setup
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/Gnarwha13/trace-lab.git
+cd trace-lab
+```
+
+### 2. Install dependencies
+
+**Python (for Streamlit experiments):**
+```bash
+cd experiments
+python3 -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+**R (for Shiny experiments):**
+```r
+source("shiny-apps/install-packages.R")
+```
+
+**Hugo (for previewing the site locally):**
+```bash
+# Mac
+brew install hugo
+
+# Windows
+winget install Hugo.Hugo.Extended
+
+# Linux
+wget https://github.com/gohugoio/hugo/releases/download/v0.146.0/hugo_extended_0.146.0_linux-amd64.tar.gz
+tar -xzf hugo_extended_0.146.0_linux-amd64.tar.gz
+sudo mv hugo /usr/local/bin/hugo
+```
+
+### 3. Preview the site locally
+
+```bash
+hugo server
+# open http://localhost:1313
+```
 
 ---
 
@@ -141,7 +213,17 @@ Description of the project, goals, methods, and current status.
 
 ## Updating the experiments app
 
-The Streamlit experiments app lives on the server at `/var/www/experiments/app.py`. To update it, SSH into the Linode and edit the file directly — it reloads automatically.
+The Streamlit app lives at `experiments/app.py` in this repo. Edit it locally, push to `main`, and it deploys automatically.
+
+For changes that add new packages, SSH into the Linode and install them:
+
+```bash
+source /var/www/experiments/venv/bin/activate
+pip install package-name
+sudo systemctl restart streamlit
+```
+
+Then add the package to `experiments/requirements.txt` and commit it.
 
 ---
 
