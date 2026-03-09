@@ -1,0 +1,26 @@
+# Trace Lab - Python package dependencies
+# Install: pip install -r requirements.txt
+
+# Core
+streamlit
+numpy
+pandas
+scipy
+
+# Visualization
+matplotlib
+plotly
+seaborn
+
+# EEG / Neuroscience
+mne
+mne-connectivity
+
+# Stats
+pingouin        # statistics, including ERP-friendly tests
+statsmodels
+
+# Utilities
+scikit-learn
+jupyter
+nbformat
